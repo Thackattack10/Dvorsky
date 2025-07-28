@@ -1,44 +1,50 @@
 import requests
-from bs4 import BeautifulSoup
 import pandas as pd
-
-TEAM_SLUGS = [
-    "boston-bruins", "chicago-blackhawks", "detroit-red-wings",
-    "edmonton-oilers", "montreal-canadiens", "toronto-maple-leafs",
-    # … include all 32 NHL teams with their dailyfaceoff slugs
-]
+from bs4 import BeautifulSoup
+from rapidfuzz import process
 
 def scrape_lineups():
-    rows = []
-    headers = {"User-Agent": "Mozilla/5.0"}
-    for slug in TEAM_SLUGS:
-        url = f"https://www.dailyfaceoff.com/teams/{slug}/line-combinations/"
-        res = requests.get(url, headers=headers)
-        if res.status_code != 200:
-            print(f"Warning: Could not fetch {slug}")
-            continue
-        soup = BeautifulSoup(res.text, "html.parser")
-        team = slug.replace("-", " ").title()
+    url = "https://dailyfaceoff.com/teams/"
+    response = requests.get(url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, "html.parser")
 
-        for section in soup.find_all("h3"):
-            section_name = section.get_text(strip=True)
-            if "Even" in section_name or "Power" in section_name:
-                table = section.find_next("table")
-                if not table:
-                    continue
-                lt = "EV" if "Even" in section_name else "PP"
-                for tr in table.find_all("tr")[1:]:
-                    cols = [td.get_text(strip=True) for td in tr.find_all("td")]
-                    if not cols or len(cols) < 2:
-                        continue
-                    line_num = cols[0]
-                    players = [p.strip() for p in cols[1].split(",")]
-                    for p in players:
-                        rows.append({
-                            "Team": team,
-                            "LineType": lt,
-                            "LineNumber": line_num,
-                            "Player": p
-                        })
+    teams = []
+    players = []
+    line_types = []
+    line_numbers = []
 
-    return pd.DataFrame(rows)
+    for team_section in soup.select(".team-roster"):
+        # Team name, e.g. 'Toronto Maple Leafs'
+        team_name = team_section.find("h3").text.strip()
+
+        # For each line type (EV, PP, PK, etc.)
+        for line_group in team_section.select(".lines-group"):
+            line_type = line_group.find("h4").text.strip()
+
+            for idx, player_li in enumerate(line_group.select("ul > li"), start=1):
+                player_name = player_li.text.strip()
+                teams.append(team_name)
+                players.append(player_name)
+                line_types.append(line_type)
+                line_numbers.append(str(idx))
+
+    df = pd.DataFrame({
+        "Team": teams,
+        "Player": players,
+        "LineType": line_types,
+        "LineNumber": line_numbers,
+    })
+
+    return df
+
+def match_names(fanduel_names, dailyfaceoff_names, score_cutoff=80):
+    name_map = {}
+    for short_name in fanduel_names:
+        match, score, _ = process.extractOne(short_name, dailyfaceoff_names, score_cutoff=score_cutoff)
+        if match:
+            name_map[short_name] = match
+        else:
+            # No good match found; map to None or original name
+            name_map[short_name] = None
+    return name_map
