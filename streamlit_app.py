@@ -1,3 +1,4 @@
+from lineups import scrape_lineups, match_names
 import streamlit as st
 import pandas as pd
 from scrape import load_fanduel_salaries
