@@ -21,7 +21,7 @@ st.markdown(
 )
 
 
-st.title("🚨 Mikey's Algorithm Bitch")
+st.title("🚨 Daily Hockey Lineups")
 
 salary_file = st.file_uploader("Upload FanDuel CSV", type="csv")
 
