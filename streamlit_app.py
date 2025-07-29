@@ -5,44 +5,55 @@ from scrape import load_fanduel_salaries
 from projections import project_points
 from optimizer import optimize_lineup
 
-# --- 🔥 Custom background + neon title style ---
+# --- 🎨 Retro Style + Background ---
 st.markdown(
     f"""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
     .stApp {{
-        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
                     url("https://www.pittsburghmagazine.com/content/uploads/data-import/78da5ad9/slapshotlarge.jpeg");
-        background-attachment: fixed;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        color: white;
+        font-family: 'Press Start 2P', monospace;
+        color: #00ffff;
+    }}
+
+    h1.neon-title {{
+        font-size: 2.5rem;
+        text-align: center;
+        color: #ff00cc;
+        text-shadow:
+            0 0 5px #ff00cc,
+            0 0 10px #ff00cc,
+            0 0 20px #ff00cc,
+            0 0 40px #ff00cc,
+            0 0 80px #ff00cc;
+        animation: flicker 1.8s infinite alternate;
+        margin-bottom: 2rem;
+    }}
+
+    .stButton button {{
+        background-color: #00ffff;
+        color: black;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 10px 20px;
+        border: 2px solid #ff00cc;
+        box-shadow: 0 0 10px #00ffff;
     }}
 
     .stDataFrame, .stTable {{
-        background-color: rgba(0, 0, 0, 0.6);
-        color: white;
-    }}
-
-    .neon-title {{
-        font-family: 'Arial Black', sans-serif;
-        font-size: 3rem;
-        color: #fff;
-        text-align: center;
-        text-shadow:
-            0 0 5px #ff004f,
-            0 0 10px #ff004f,
-            0 0 20px #ff004f,
-            0 0 40px #ff004f,
-            0 0 80px #ff004f;
-        animation: flicker 3s infinite alternate;
+        background-color: rgba(0, 0, 0, 0.85);
+        color: #00ffff;
+        font-size: 10px;
     }}
 
     @keyframes flicker {{
-        0%   {{ opacity: 1; }}
-        45%  {{ opacity: 0.85; }}
-        60%  {{ opacity: 1; }}
-        75%  {{ opacity: 0.9; }}
+        0% {{ opacity: 1; }}
+        50% {{ opacity: 0.8; }}
         100% {{ opacity: 1; }}
     }}
     </style>
@@ -50,10 +61,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- 🚨 Title ---
-st.markdown('<h1 class="neon-title">🚨 Mikey\'s Daily Lineups</h1>', unsafe_allow_html=True)
+# --- 🚨 Neon Title ---
+st.markdown('<h1 class="neon-title">🚨 Mikey\'s Algorithm Bitch 🚨</h1>', unsafe_allow_html=True)
 
-# --- Upload CSV ---
+# --- 📂 Upload CSV ---
 salary_file = st.file_uploader("Upload FanDuel CSV", type="csv")
 
 if salary_file:
@@ -68,26 +79,21 @@ if salary_file:
         st.error(f"Missing required columns: {', '.join(required_columns)}")
         st.stop()
 
-    # Placeholder stats
+    # --- 📊 Placeholder Stats ---
     df['Goals'] = 12
     df['Assists'] = 8
     df['Shots'] = 1.6
     df['BlockedShots'] = 1.6
 
-    # Calculate projection per player
     df['Projection'] = df.apply(project_points, axis=1)
     df['Projection'].fillna(0, inplace=True)
 
-    # Scrape lineup data
+    # --- 🧩 Scrape Line Combinations ---
     lineup_df = scrape_lineups()
 
-    # Fuzzy match FanDuel nicknames to DailyFaceoff players
     name_map = match_names(df['Nickname'], lineup_df['Player'])
-
-    # Map nicknames to matched names
     df['MatchedName'] = df['Nickname'].map(name_map)
 
-    # Flags for power play and even strength 1st lines
     df['on_PP1'] = df['MatchedName'].isin(
         lineup_df[(lineup_df.LineType == 'PP') & (lineup_df.LineNumber == '1')]['Player']
     )
@@ -95,26 +101,24 @@ if salary_file:
         lineup_df[(lineup_df.LineType == 'EV') & (lineup_df.LineNumber == '1')]['Player']
     )
 
-    # Display scraped line combinations
+    # --- 🧩 Show Line Combinations ---
     st.subheader("🧩 Line Combinations (DailyFaceoff)")
     st.dataframe(lineup_df)
 
-    # Show fuzzy matching results for debugging
+    # --- 🔍 Name Matching ---
     st.subheader("🔎 Name Matching (FanDuel ➜ DailyFaceoff)")
     st.dataframe(pd.DataFrame(name_map.items(), columns=["FanDuel Nickname", "Matched Name"]))
 
-    # Show player projections sorted descending
+    # --- 📊 Player Projections ---
     st.subheader("📊 Player Projections")
     st.dataframe(df.sort_values("Projection", ascending=False))
 
-    # Optimize lineup
+    # --- 🧮 Optimized Lineup ---
     st.subheader("🧮 Optimized Lineup")
     lineup = optimize_lineup(df)
-
-    # Show optimized lineup with key info
     st.dataframe(lineup[['Nickname', 'Position', 'Salary', 'Projection']])
 
-    # Show summary info: total salary and total projected points
+    # --- 💰 Summary Stats ---
     total_salary = lineup['Salary'].sum()
     total_projection = lineup['Projection'].sum()
     st.write(f"**Total Salary:** ${total_salary}")
