@@ -15,6 +15,10 @@ if salary_file:
     except Exception as e:
         st.error(f"Error loading FanDuel salaries file: {e}")
         st.stop()
+required_columns = ['Nickname', 'Salary', 'Position']
+if not all(col in df.columns for col in required_columns):
+    st.error(f"Missing required columns: {', '.join(required_columns)}")
+    st.stop()
 
     # Placeholder stats - replace with real data when available
     df['Goals'] = 12
