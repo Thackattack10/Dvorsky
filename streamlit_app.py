@@ -28,6 +28,7 @@ if not all(col in df.columns for col in required_columns):
 
     # Calculate projection per player
     df['Projection'] = df.apply(project_points, axis=1)
+    df['Projection'].fillna(0, inplace=True)
 
     # Scrape lineup data
     lineup_df = scrape_lineups()
