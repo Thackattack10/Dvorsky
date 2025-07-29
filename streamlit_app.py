@@ -12,7 +12,7 @@ st.markdown(
     @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
     .stApp {{
-        background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
                     url("https://www.pittsburghmagazine.com/content/uploads/data-import/78da5ad9/slapshotlarge.jpeg");
         background-size: cover;
         background-position: center;
@@ -26,11 +26,11 @@ st.markdown(
         text-align: center;
         color: #ff00cc;
         text-shadow:
-            0 0 5px #ff00cc,
-            0 0 10px #ff00cc,
-            0 0 20px #ff00cc,
-            0 0 40px #ff00cc,
-            0 0 80px #ff00cc;
+            0 0 5px #ff004f,
+            0 0 10px #ff004f,
+            0 0 20px #ff004f,
+            0 0 40px #ff004f,
+            0 0 80px #ff004f;
         animation: flicker 1.8s infinite alternate;
         margin-bottom: 2rem;
     }}
