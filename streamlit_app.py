@@ -5,22 +5,21 @@ from scrape import load_fanduel_salaries
 from projections import project_points
 from optimizer import optimize_lineup
 
-# 🔥 Background image of drunk Brett Hull
 st.markdown(
     f"""
     <style>
     .stApp {{
-        background-image: url("https://i.imgur.com/WNXP0aX.jpeg");
+        background-image: url("https://www.pittsburghmagazine.com/content/uploads/data-import/78da5ad9/slapshotlarge.jpeg");
         background-attachment: fixed;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
-        opacity: 0.97;
     }}
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 st.title("🚨 Mikey's Algorithm Bitch")
 
