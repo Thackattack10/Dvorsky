@@ -17,10 +17,10 @@ if salary_file:
         st.stop()
 
     # Placeholder stats - replace with real data when available
-    df['Goals'] = 10
-    df['Assists'] = 15
-    df['Shots'] = 60
-    df['BlockedShots'] = 20
+    df['Goals'] = 12
+    df['Assists'] = 8
+    df['Shots'] = 1.6
+    df['BlockedShots'] = 1.6
 
     # Calculate projection per player
     df['Projection'] = df.apply(project_points, axis=1)
