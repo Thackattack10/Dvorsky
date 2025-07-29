@@ -9,16 +9,19 @@ st.markdown(
     f"""
     <style>
     .stApp {{
-        background-image: url("https://www.pittsburghmagazine.com/content/uploads/data-import/78da5ad9/slapshotlarge.jpeg");
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+                    url("https://www.pittsburghmagazine.com/content/uploads/data-import/78da5ad9/slapshotlarge.jpeg");
         background-attachment: fixed;
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
+        color: white;
     }}
     </style>
     """,
     unsafe_allow_html=True
 )
+
 
 
 st.title("🚨 Daily Hockey Lineups")
