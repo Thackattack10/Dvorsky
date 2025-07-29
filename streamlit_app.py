@@ -62,7 +62,7 @@ st.markdown(
 )
 
 # --- 🚨 Neon Title ---
-st.markdown('<h1 class="neon-title">🚨 Mikey\'s Algorithm Bitch 🚨</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="neon-title">🚨 Daily Hockey Lineups 🚨</h1>', unsafe_allow_html=True)
 
 # --- 📂 Upload CSV ---
 salary_file = st.file_uploader("Upload FanDuel CSV", type="csv")
