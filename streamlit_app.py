@@ -1,35 +1,40 @@
-from lineups import scrape_lineups, match_names
+from lineups import scrape_lineups, match_names  # Removed duplicate import
 import streamlit as st
 import pandas as pd
 from scrape import load_fanduel_salaries
 from projections import project_points
 from optimizer import optimize_lineup
-from lineups import scrape_lineups, match_names  # match_names is the fuzzy matcher
 
 st.title("🚨 NHL FanDuel DFS Optimizer")
 
 salary_file = st.file_uploader("Upload FanDuel CSV", type="csv")
 
 if salary_file:
-    df = load_fanduel_salaries(salary_file)
+    try:
+        df = load_fanduel_salaries(salary_file)
+    except Exception as e:
+        st.error(f"Error loading FanDuel salaries file: {e}")
+        st.stop()
 
-    # Add placeholder stats (replace with real stats later)
+    # Placeholder stats - replace with real data when available
     df['Goals'] = 10
     df['Assists'] = 15
     df['Shots'] = 60
     df['BlockedShots'] = 20
+
+    # Calculate projection per player
     df['Projection'] = df.apply(project_points, axis=1)
 
-    # Scrape DailyFaceoff line combinations
+    # Scrape lineup data
     lineup_df = scrape_lineups()
 
-    # Fuzzy match FanDuel 'Nickname' to DailyFaceoff 'Player'
+    # Fuzzy match FanDuel nicknames to DailyFaceoff players
     name_map = match_names(df['Nickname'], lineup_df['Player'])
 
-    # Map FanDuel nicknames to matched DailyFaceoff full names
+    # Map nicknames to matched names
     df['MatchedName'] = df['Nickname'].map(name_map)
 
-    # Add power play and even strength flags using matched names
+    # Flags for power play and even strength 1st lines
     df['on_PP1'] = df['MatchedName'].isin(
         lineup_df[(lineup_df.LineType == 'PP') & (lineup_df.LineNumber == '1')]['Player']
     )
@@ -37,19 +42,30 @@ if salary_file:
         lineup_df[(lineup_df.LineType == 'EV') & (lineup_df.LineNumber == '1')]['Player']
     )
 
-    # Show the lineup combos scraped
+    # Display scraped line combinations
     st.subheader("🧩 Line Combinations (DailyFaceoff)")
     st.dataframe(lineup_df)
 
-    # Show the fuzzy name matches (debugging aid)
+    # Show fuzzy matching results for debugging
     st.subheader("🔎 Name Matching (FanDuel ➜ DailyFaceoff)")
     st.dataframe(pd.DataFrame(name_map.items(), columns=["FanDuel Nickname", "Matched Name"]))
 
-    # Show player projections
+    # Show player projections sorted descending
     st.subheader("📊 Player Projections")
     st.dataframe(df.sort_values("Projection", ascending=False))
 
-    # Optimize and show the lineup
+    # Optimize lineup
     st.subheader("🧮 Optimized Lineup")
     lineup = optimize_lineup(df)
+
+    # Show optimized lineup with key info
     st.dataframe(lineup[['Nickname', 'Position', 'Salary', 'Projection']])
+
+    # Show summary info: total salary and total projected points
+    total_salary = lineup['Salary'].sum()
+    total_projection = lineup['Projection'].sum()
+    st.write(f"**Total Salary:** ${total_salary}")
+    st.write(f"**Total Projected Points:** {total_projection:.2f}")
+
+else:
+    st.info("Please upload a FanDuel CSV file to get started.")
