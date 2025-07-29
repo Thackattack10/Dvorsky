@@ -30,11 +30,11 @@ st.markdown(
         color: #fff;
         text-align: center;
         text-shadow:
-            0 0 5px #00FFFF,
-            0 0 10px #00FFFF,
-            0 0 20px #00FFFF,
-            0 0 40px #00FFFF,
-            0 0 80px #00FFFF;
+            0 0 5px #ff004f,
+            0 0 10px #ff004f,
+            0 0 20px #ff004f,
+            0 0 40px #ff004f,
+            0 0 80px #ff004f;
         animation: flicker 3s infinite alternate;
     }}
 
