@@ -5,6 +5,23 @@ from scrape import load_fanduel_salaries
 from projections import project_points
 from optimizer import optimize_lineup
 
+# 🔥 Background image of drunk Brett Hull
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url("https://i.imgur.com/WNXP0aX.jpeg");
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.97;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.title("🚨 Mikey's Algorithm Bitch")
 
 salary_file = st.file_uploader("Upload FanDuel CSV", type="csv")
@@ -21,9 +38,7 @@ if salary_file:
         st.error(f"Missing required columns: {', '.join(required_columns)}")
         st.stop()
 
-    # --- Unindented from here ---
-
-    # Placeholder stats - replace with real data when available
+    # Placeholder stats
     df['Goals'] = 12
     df['Assists'] = 8
     df['Shots'] = 1.6
@@ -77,18 +92,3 @@ if salary_file:
 
 else:
     st.info("Please upload a FanDuel CSV file to get started.")
-st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-image: url("https://i.imgur.com/WNXP0aX.jpeg");
-        background-attachment: fixed;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        opacity: 0.97;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
