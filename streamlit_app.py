@@ -5,7 +5,7 @@ from scrape import load_fanduel_salaries
 from projections import project_points
 from optimizer import optimize_lineup
 
-st.title("🚨 NHL FanDuel DFS Optimizer")
+st.title("🚨 Mikey's Algorithm Bitch")
 
 salary_file = st.file_uploader("Upload FanDuel CSV", type="csv")
 
