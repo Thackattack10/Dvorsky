@@ -77,3 +77,18 @@ if salary_file:
 
 else:
     st.info("Please upload a FanDuel CSV file to get started.")
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url("https://i.imgur.com/WNXP0aX.jpeg");
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        opacity: 0.97;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
