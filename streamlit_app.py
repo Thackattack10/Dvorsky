@@ -30,12 +30,12 @@ st.markdown(
         color: #fff;
         text-align: center;
         text-shadow:
-            0 0 5px #ff004f,
-            0 0 10px #ff004f,
-            0 0 20px #ff004f,
-            0 0 40px #ff004f,
-            0 0 80px #ff004f;
-        animation: flicker 1.5s infinite alternate;
+            0 0 5px #ff4500,
+            0 0 10px #ff4500,
+            0 0 20px #ff4500,
+            0 0 40px #ff4500,
+            0 0 80px #ff4500;
+        animation: flicker 1s infinite alternate;
     }}
 
     @keyframes flicker {{
