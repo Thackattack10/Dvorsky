@@ -5,11 +5,12 @@ from scrape import load_fanduel_salaries
 from projections import project_points
 from optimizer import optimize_lineup
 
+# --- 🔥 Custom background + neon title style ---
 st.markdown(
     f"""
     <style>
     .stApp {{
-        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
                     url("https://www.pittsburghmagazine.com/content/uploads/data-import/78da5ad9/slapshotlarge.jpeg");
         background-attachment: fixed;
         background-size: cover;
@@ -17,15 +18,42 @@ st.markdown(
         background-repeat: no-repeat;
         color: white;
     }}
+
+    .stDataFrame, .stTable {{
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+    }}
+
+    .neon-title {{
+        font-family: 'Arial Black', sans-serif;
+        font-size: 3rem;
+        color: #fff;
+        text-align: center;
+        text-shadow:
+            0 0 5px #ff004f,
+            0 0 10px #ff004f,
+            0 0 20px #ff004f,
+            0 0 40px #ff004f,
+            0 0 80px #ff004f;
+        animation: flicker 1.5s infinite alternate;
+    }}
+
+    @keyframes flicker {{
+        0%   {{ opacity: 1; }}
+        45%  {{ opacity: 0.85; }}
+        60%  {{ opacity: 1; }}
+        75%  {{ opacity: 0.9; }}
+        100% {{ opacity: 1; }}
+    }}
     </style>
     """,
     unsafe_allow_html=True
 )
 
+# --- 🚨 Title ---
+st.markdown('<h1 class="neon-title">🚨 Mikey\'s Algorithm Bitch</h1>', unsafe_allow_html=True)
 
-
-st.title("🚨 Daily Hockey Lineups")
-
+# --- Upload CSV ---
 salary_file = st.file_uploader("Upload FanDuel CSV", type="csv")
 
 if salary_file:
