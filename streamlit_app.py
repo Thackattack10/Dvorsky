@@ -9,7 +9,7 @@ st.markdown(
     f"""
     <style>
     .stApp {{
-        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
                     url("https://www.pittsburghmagazine.com/content/uploads/data-import/78da5ad9/slapshotlarge.jpeg");
         background-attachment: fixed;
         background-size: cover;
