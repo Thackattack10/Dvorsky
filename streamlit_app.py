@@ -35,7 +35,7 @@ st.markdown(
             0 0 20px #00FFFF,
             0 0 40px #00FFFF,
             0 0 80px #00FFFF;
-        animation: flicker 1s infinite alternate;
+        animation: flicker 3s infinite alternate;
     }}
 
     @keyframes flicker {{
