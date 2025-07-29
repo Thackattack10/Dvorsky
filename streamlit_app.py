@@ -24,7 +24,7 @@ st.markdown(
     h1.neon-title {{
         font-size: 2.5rem;
         text-align: center;
-        color: #ff00cc;
+        color: #ff4500;
         text-shadow:
             0 0 5px #00FFFF,
             0 0 10px #00FFFF,
